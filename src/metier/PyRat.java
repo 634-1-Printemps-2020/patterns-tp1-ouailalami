@@ -39,11 +39,11 @@ public class PyRat {
         System.out.println((fromageIci_EnOrdreConstant(pt1) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position, ordre constant " + pt1);
         System.out.println((fromageIci_EnOrdreConstant(pt2) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position, ordre constant " + pt2);
         System.out.println();
-        System.out.println((passagePossible(pt1, pt3, laby) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
-        System.out.println((passagePossible(pt1, pt2, laby) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
+        System.out.println((passagePossible(pt1, pt3, laby) ? "Il y a un" : "Il n'y a pas de") + " passage normal de " + pt1 + " vers " + pt3);
+        System.out.println((passagePossible(pt1, pt2, laby) ? "Il y a un" : "Il n'y a pas de") + " passage normal de " + pt1 + " vers " + pt2);
         System.out.println();
-        System.out.println((passagePossible_EnOrdreConstant(pt1, pt3) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
-        System.out.println((passagePossible_EnOrdreConstant(pt1, pt2) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
+        System.out.println((passagePossible_EnOrdreConstant(pt1, pt3) ? "Il y a un" : "Il n'y a pas de") + " passage constant de " + pt1 + " vers " + pt3);
+        System.out.println((passagePossible_EnOrdreConstant(pt1, pt2) ? "Il y a un" : "Il n'y a pas de") + " passage constant de " + pt1 + " vers " + pt2);
         System.out.println();
         System.out.println("Liste des points inatteignables depuis la position " + position + " : " + pointsInatteignables(position));
 
@@ -74,9 +74,9 @@ public class PyRat {
 
         for (Point k : laby.keySet())
         {
-            if (k == de) {
+            if (k.equals(de)) {
                 for (Point p : laby.get(k)) {
-                    if (p == a){
+                    if (p.equals(a)){
                         return true;
                     }
                 }

@@ -3,10 +3,25 @@ package metier;
 import java.util.*;
 
 public class PyRat {
-    HashSet<int> h = new HashSet<int>;
+    HashSet<Point> hf = new HashSet<Point>();
+    HashMap<Point, Set<Point>> hp = new HashMap<Point, Set<Point>>();
     /* Méthode appelée une seule fois permettant d'effectuer des traitements "lourds" afin d'augmenter la performace de la méthode turn. */
     public void preprocessing(Map<Point, List<Point>> laby, int labyWidth, int labyHeight, Point position, List<Point> fromages) {
-        for ( 
+        // remplir la hashSet
+        for (Point p : fromages)
+        {
+            hf.add(p);
+        }
+        // remplire la hashmap
+        for (Point k : laby.keySet())
+        {
+            Set<Point> liste = new HashSet<Point>();
+            for (Point p : laby.get(k))
+            {
+                liste.add(p);;
+            };
+            hp.put(k,liste);
+        }
     }
 
     /* Méthode de test appelant les différentes fonctionnalités à développer.
@@ -17,11 +32,28 @@ public class PyRat {
     public void turn(Map<Point, List<Point>> laby, int labyWidth, int labyHeight, Point position, List<Point> fromages) {
         Point pt1 = new Point(2,1);
         Point pt2 = new Point(3,1);
-        System.out.println((fromageIci(pt1, laby) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position " + pt1);
-        System.out.println((fromageIci_EnOrdreConstant(pt2) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position " + pt2);
-        System.out.println((passagePossible(pt1, pt2) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
+        Point pt3 = new Point(4,1);
+        System.out.println((fromageIci(pt1, fromages) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position, normal" + pt1);
+        System.out.println((fromageIci(pt2, fromages) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position, normal " + pt2);
+        System.out.println();
+        System.out.println((fromageIci_EnOrdreConstant(pt1) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position, ordre constant " + pt1);
+        System.out.println((fromageIci_EnOrdreConstant(pt2) ? "Il y a un" : "Il n'y a pas de") + " fromage ici, en position, ordre constant " + pt2);
+        System.out.println();
+        System.out.println((passagePossible(pt1, pt3, laby) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
+        System.out.println((passagePossible(pt1, pt2, laby) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
+        System.out.println();
+        System.out.println((passagePossible_EnOrdreConstant(pt1, pt3) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
         System.out.println((passagePossible_EnOrdreConstant(pt1, pt2) ? "Il y a un" : "Il n'y a pas de") + " passage de " + pt1 + " vers " + pt2);
+        System.out.println();
         System.out.println("Liste des points inatteignables depuis la position " + position + " : " + pointsInatteignables(position));
+
+        System.out.println();
+
+        System.out.println();
+        System.out.println();
+        System.out.println(laby);
+        System.out.println();
+        System.out.println(fromages);
     }
 
     /* Regarde dans la liste des fromages s’il y a un fromage à la position pos.
@@ -33,20 +65,35 @@ public class PyRat {
     /* Regarde de manière performante (accès en ordre constant) s’il y a un fromage à la position pos.
         @return true s'il y a un fromage à la position pos, false sinon. */
     private boolean fromageIci_EnOrdreConstant(Point pos) {
-        return false;
+        return hf.contains(pos);
     }
 
     /* Indique si le joueur peut passer de la position (du Point) « de » au point « a ».
         @return true s'il y a un passage depuis  « de » vers « a ». */
-    private boolean passagePossible(Point de, Point a) {
-        return false;
+    private boolean passagePossible(Point de, Point a, Map<Point, List<Point>> laby) {
+
+        for (Point k : laby.keySet())
+        {
+            if (k == de) {
+                for (Point p : laby.get(k)) {
+                    if (p == a){
+                        return true;
+                    }
+                }
+            }
+        }
+
+    return false;
     }
 
     /* Indique si le joueur peut passer de la position (du Point) « de » au point « a »,
         mais sans devoir parcourir la liste des Points se trouvant dans la Map !
         @return true s'il y a un passage depuis  « de » vers « a ». */
     private boolean passagePossible_EnOrdreConstant(Point de, Point a) {
-        return false;
+        if (hp.get(de).contains(a)){return true;}
+        else {
+            return false;
+        }
     }
 
     /* Retourne la liste des points qui ne peuvent pas être atteints depuis la position « pos ».

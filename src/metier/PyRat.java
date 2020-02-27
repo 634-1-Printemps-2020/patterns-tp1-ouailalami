@@ -45,7 +45,7 @@ public class PyRat {
         System.out.println((passagePossible_EnOrdreConstant(pt1, pt3) ? "Il y a un" : "Il n'y a pas de") + " passage constant de " + pt1 + " vers " + pt3);
         System.out.println((passagePossible_EnOrdreConstant(pt1, pt2) ? "Il y a un" : "Il n'y a pas de") + " passage constant de " + pt1 + " vers " + pt2);
         System.out.println();
-        System.out.println("Liste des points inatteignables depuis la position " + position + " : " + pointsInatteignables(position));
+        System.out.println("Liste des points inatteignables depuis la position " + position + " : " + pointsInatteignables(position, laby));
 
         System.out.println();
 
@@ -98,7 +98,26 @@ public class PyRat {
 
     /* Retourne la liste des points qui ne peuvent pas être atteints depuis la position « pos ».
         @return la liste des points qui ne peuvent pas être atteints depuis la position « pos ». */
-    private List<Point> pointsInatteignables(Point pos) {
-        return null;
-    }
+    private List<Point> pointsInatteignables(Point pos, Map<Point, List<Point>> laby) {
+            System.out.print("Parcours depuis : " + pos + "\n");
+            //int cpt = 0;
+            ArrayList<Point> chemin = new ArrayList<>();
+            parcoursRec(pos, chemin, laby);
+            return chemin;
+            }
+
+
+    private void parcoursRec(Point pos, ArrayList<Point> chemin, Map<Point, List<Point>> laby){
+        chemin.add(pos);
+
+            for(Point voisin : laby.keySet()){
+                if (!chemin.contains(voisin))
+                    //cpt++;
+                    parcoursRec(voisin, chemin, laby);
+                    //cpt--;
+                }
+            chemin.remove(pos);
+        }
 }
+
+
